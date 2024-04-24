@@ -9,7 +9,7 @@ export const getOriginalURL = async (urlCode: string) => {
         urlCode: urlCode,
       }),
     });
-    const data = await response.json();
+    const data = await response?.json();
     if (data) return data?.originalUrl;
   } catch (error) {
     console.error("Error fetching Original URL:", error);

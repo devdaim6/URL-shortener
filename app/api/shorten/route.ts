@@ -3,36 +3,33 @@ import { URL } from "@/models/url";
 import { NextResponse } from "next/server";
 import randomstring from "randomstring";
 
-export async function POST(
-  request: any,
-  { params }: { params: { params: string[] } }
-) {
-  const [url, length] = params.params;
-  const origin = request.nextUrl.origin;
+export async function POST(request: any) {
+  const { longUrl, urlLength } = await request.json();
+  const origin = await request?.nextUrl?.origin;
   try {
     await connectMongoDB();
     const urlCode = randomstring
       .generate({
         charset: "alphabetic",
-        length: Number(length),
+        length: Number(urlLength),
       })
       .toLocaleLowerCase();
     const shortUrl = `${origin}/${urlCode}`;
 
     await URL.create({
-      originalUrl: url,
+      originalUrl: longUrl,
       urlCode,
     });
 
     return NextResponse.json({
-      message: "Url Shortened.",
+      message: "The URL has been successfully shortened.",
       shortUrl,
       success: true,
       status: 201,
     });
   } catch (error) {
     return NextResponse.json({
-      message: "An error occurred while Shortening the URL.",
+      message: "An error occurred while attempting to shorten the URL.",
       success: false,
       status: 500,
     });

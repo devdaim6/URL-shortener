@@ -3,22 +3,23 @@ export const handleSubmit = async (
   setLoading: any,
   setShortUrl: any,
   longUrl: string,
-  urlLength: number,
+  urlLength: number
 ) => {
   e.preventDefault();
   setLoading(true);
   try {
-    const response = await fetch(
-      `/api/shorten/${encodeURIComponent(longUrl)}/${urlLength}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
-    setShortUrl(data.shortUrl);
+    const response = await fetch(`/api/shorten/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        longUrl: (longUrl),
+        urlLength: urlLength,
+      }),
+    });
+    const data = await response?.json();
+    setShortUrl(data?.shortUrl);
   } catch (error) {
     console.error("Error shortening URL:", error);
   } finally {

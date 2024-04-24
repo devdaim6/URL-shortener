@@ -11,7 +11,6 @@ const UrlCode = ({ params }) => {
 
       try {
         const originalUrl = await getOriginalURL(params?.urlCode);
-        console.log(originalUrl);
         setOriginalUrl(originalUrl);
       } catch (error) {
         console.error("Error fetching Original URL:", error);
