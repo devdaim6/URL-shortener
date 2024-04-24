@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 import randomstring from "randomstring";
 
 export async function POST(request: any) {
-  const { longUrl, urlLength } = await request.json();
-  const origin = await request?.nextUrl?.origin;
+  const { longUrl, urlLength, customUrlCode } = await request.json();
+  const origin = request?.nextUrl?.origin;
   try {
     await connectMongoDB();
     const urlCode = randomstring
@@ -14,11 +14,12 @@ export async function POST(request: any) {
         length: Number(urlLength),
       })
       .toLocaleLowerCase();
-    const shortUrl = `${origin}/${urlCode}`;
+    const shortUrl = `${origin}/${customUrlCode ? customUrlCode : urlCode}`;
 
     await URL.create({
       originalUrl: longUrl,
-      urlCode,
+      urlCode: customUrlCode ? customUrlCode : urlCode,
+      type: customUrlCode ? "custom" : "random",
     });
 
     return NextResponse.json({

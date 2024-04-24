@@ -10,7 +10,9 @@ export const getOriginalURL = async (urlCode: string) => {
       }),
     });
     const data = await response?.json();
-    if (data) return data?.originalUrl;
+    if (data?.status === 403) {
+      return null;
+    } else return data?.originalUrl;
   } catch (error) {
     console.error("Error fetching Original URL:", error);
   }

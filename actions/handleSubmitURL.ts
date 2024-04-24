@@ -3,7 +3,8 @@ export const handleSubmit = async (
   setLoading: any,
   setShortUrl: any,
   longUrl: string,
-  urlLength: number
+  urlLength: number,
+  customUrlCode: string
 ) => {
   e.preventDefault();
   setLoading(true);
@@ -16,6 +17,7 @@ export const handleSubmit = async (
       body: JSON.stringify({
         longUrl: (longUrl),
         urlLength: urlLength,
+        customUrlCode
       }),
     });
     const data = await response?.json();

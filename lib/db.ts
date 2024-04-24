@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 
+const configOptions = {
+  dbName: "url",
+  useNewUrlParser: true
+};
+
 export const connectMongoDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI as string, {
-      dbName: "url",
-    });
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.log("Error connecting to MongoDB: ", error);
-  }
+  mongoose
+    .connect(process.env.MONGO_URI, configOptions)
+    .then(() => console.log("database connected successfully!"))
+    .catch((err) =>
+      console.log(`Getting Error from DB connection ${err.message}`)
+    );
 };

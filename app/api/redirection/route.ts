@@ -10,6 +10,11 @@ export async function POST(request: any) {
     if (!urlObject) {
       return NextResponse.json({ status: "Error" });
     }
+    const currentDate = new Date();
+    if (urlObject.age < currentDate) {
+      await URL.deleteOne({ urlCode });
+      return NextResponse.json({ status: 403 });
+    }
 
     return NextResponse.json({
       originalUrl: urlObject.originalUrl,
