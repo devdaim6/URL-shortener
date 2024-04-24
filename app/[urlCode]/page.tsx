@@ -1,8 +1,31 @@
-import Redirection from "@/components/Redirection"
-import { FC } from "react"
+"use client"
+import { getOriginalURL } from "@/actions/getOriginalURL";
+import { notFound, redirect } from "next/navigation";
+import { useState, useMemo, useEffect } from 'react';
 
-const page: FC = ({ params }: any) => {
-    return <Redirection urlCode={params.urlCode} />
-}
+const UrlCode = ({ params }) => {
+  const [originalUrl, setOriginalUrl] = useState(null);
 
-export default page
+  useEffect(() => {
+    (async () => {
+
+      try {
+        const originalUrl = await getOriginalURL(params?.urlCode);
+        console.log(originalUrl);
+        setOriginalUrl(originalUrl);
+      } catch (error) {
+        console.error("Error fetching Original URL:", error);
+      }
+    })();
+  }, [params?.urlCode]);
+
+  useMemo(() => {
+    if (originalUrl) {
+      return redirect(originalUrl);
+    }
+  }, [originalUrl]);
+
+  return null;
+};
+
+export default UrlCode;

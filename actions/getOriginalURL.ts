@@ -1,9 +1,4 @@
-export const getOriginalURL = async (
-  setOriginalURL: any,
-  setLoading: any,
-  urlCode: string
-) => {
-  setLoading(true);
+export const getOriginalURL = async (urlCode: string) => {
   try {
     const response = await fetch(`/api/redirection/`, {
       method: "POST",
@@ -15,11 +10,8 @@ export const getOriginalURL = async (
       }),
     });
     const data = await response.json();
-    console.log("data ", data);
-    setOriginalURL(data.originalUrl);
+    if (data) return data?.originalUrl;
   } catch (error) {
     console.error("Error fetching Original URL:", error);
-  } finally {
-    setLoading(false);
   }
 };

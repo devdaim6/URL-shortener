@@ -1,5 +1,5 @@
 import { connectMongoDB } from "@/lib/db";
-import Url from "@/models/url";
+import { URL } from "@/models/url";
 import { NextResponse } from "next/server";
 import randomstring from "randomstring";
 
@@ -19,7 +19,7 @@ export async function POST(
       .toLocaleLowerCase();
     const shortUrl = `${origin}/${urlCode}`;
 
-    await Url.create({
+    await URL.create({
       originalUrl: url,
       urlCode,
     });
