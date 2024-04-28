@@ -8,17 +8,17 @@ export async function POST(request: any) {
   const origin = request?.nextUrl?.origin;
   try {
     await connectMongoDB();
-    const urlCode = randomstring
+    const urlCode = customUrlCode ? customUrlCode : randomstring
       .generate({
         charset: "alphabetic",
         length: Number(urlLength),
       })
       .toLocaleLowerCase();
-    const shortUrl = `${origin}/${customUrlCode ? customUrlCode : urlCode}`;
+    const shortUrl = `${origin}/${urlCode}`;
 
     await URL.create({
       originalUrl: longUrl,
-      urlCode: customUrlCode ? customUrlCode : urlCode,
+      urlCode: urlCode,
       type: customUrlCode ? "custom" : "random",
     });
 
