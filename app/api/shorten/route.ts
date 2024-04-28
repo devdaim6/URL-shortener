@@ -2,6 +2,7 @@ import { connectMongoDB } from "@/lib/db";
 import { URL } from "@/models/url";
 import { NextResponse } from "next/server";
 import randomstring from "randomstring";
+ import Cryptr from 'cryptr';
 
 export async function POST(request: any) {
   const { longUrl, urlLength, customUrlCode } = await request.json();
@@ -15,9 +16,12 @@ export async function POST(request: any) {
       })
       .toLocaleLowerCase();
     const shortUrl = `${origin}/${urlCode}`;
-
+    const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
+    const encryptedLongUrl = cryptr.encrypt(longUrl);
+ 
+ 
     await URL.create({
-      originalUrl: longUrl,
+      originalUrl: encryptedLongUrl,
       urlCode: urlCode,
       type: customUrlCode ? "custom" : "random",
     });
