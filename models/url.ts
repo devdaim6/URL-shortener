@@ -5,7 +5,9 @@ const UrlSchema = new mongoose.Schema({
   urlCode: { type: String, required: true, unique: true },
   type: { type: String, required: true, enum: ['custom', 'random'] },
   date: { type: Date, default: Date.now() },
-  age: { type: Date, default: Date.now() + 600000 }, // 10 minutes in milliseconds
+  linkExpiration: { type: Date, default: Date.now() + 30*24*60*60*1000 },
+  password: { type: String ,default:""},
+  clicks: { type: Number, default: 0 },
 });
 
 const URL = mongoose.models.URL || mongoose.model("URL", UrlSchema);
