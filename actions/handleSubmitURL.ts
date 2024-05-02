@@ -15,9 +15,9 @@ export const handleSubmit = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        longUrl: (longUrl),
+        longUrl: longUrl,
         urlLength: urlLength,
-        customUrlCode
+        customUrlCode,
       }),
     });
     const data = await response?.json();

@@ -3,8 +3,13 @@ import { URL } from "@/models/url";
 import { NextResponse } from "next/server";
 import Cryptr from "cryptr";
 
+const RATE_LIMIT_WINDOW = 60000;
+
 export async function POST(request: any) {
   const { urlCode } = await request.json();
+  const response = await fetch("https://api.ipify.org?format=json");
+  const data = await response.json();
+  const ip = data.ip;
   try {
     await connectMongoDB();
     const urlObject = await URL.findOne({ urlCode });
@@ -19,7 +24,40 @@ export async function POST(request: any) {
 
     const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
     const decryptedOriginalUrl = cryptr.decrypt(urlObject?.originalUrl);
-    await URL.updateOne({ urlCode }, { $inc: { clicks: 1 } });
+
+    const ipEntry = urlObject.ratelimit.find((entry: any) => entry.ip === ip);
+
+    if (ipEntry) {
+      const lastAccessed = new Date(ipEntry.lastAccessed);
+
+      if (currentDate.getTime() - lastAccessed.getTime() <= RATE_LIMIT_WINDOW) {
+        if (ipEntry.limit <= 1) {
+          return NextResponse.json({
+            status: 429,
+            message: "Rate limit exceeded. Please try again later.",
+          });
+        } else {
+          ipEntry.limit -= 1;
+        }
+      } else {
+        // Reset limit if last accessed is more than a minute ago
+        ipEntry.limit = 10;
+      }
+
+      ipEntry.lastAccessed = currentDate; // Update last accessed time
+    } else {
+      // If IP entry doesn't exist, create a new one
+      urlObject.ratelimit.push({ ip, limit: 10, lastAccessed: currentDate });
+    }
+
+    await URL.updateOne(
+      { urlCode },
+      {
+        lastAccessed: currentDate,
+        $set: { ratelimit: urlObject.ratelimit, clicks: urlObject.clicks + 1 }, // Update the entire ratelimit array
+      }
+    );
+
     return NextResponse.json({
       originalUrl: decryptedOriginalUrl,
     });

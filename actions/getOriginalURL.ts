@@ -11,7 +11,9 @@ export const getOriginalURL = async (urlCode: string) => {
     });
     const data = await response?.json();
     if (data?.status === 403) {
-      return null;
+      return "invalid";
+    } else if (data?.status === 429) {
+      return "limit";
     } else return data?.originalUrl;
   } catch (error) {
     console.error("Error fetching Original URL:", error);
