@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const configOptions = {
   dbName: "url",
-  useNewUrlParser: true
 };
 
 export const connectMongoDB = async () => {

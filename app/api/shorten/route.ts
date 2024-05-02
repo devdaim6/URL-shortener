@@ -7,7 +7,7 @@ import Cryptr from "cryptr";
 export async function POST(request: any) {
   const { longUrl, urlLength, customUrlCode } = await request.json();
   const origin = request?.nextUrl?.origin;
-  
+
   try {
     await connectMongoDB();
 
@@ -21,17 +21,13 @@ export async function POST(request: any) {
           .toLocaleLowerCase();
     const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
     const encryptedLongUrl = cryptr.encrypt(longUrl);
-
-    let existingUrl = await URL.findOne({ urlCode: customUrlCode });
+    let existingUrl = await URL.findOne({ urlCode });
 
     if (existingUrl) {
-      urlCode =
-        customUrlCode +
-        randomstring.generate({
-          charset: "numeric",
-          length: Math.floor(Math.random() * (3 - 2 + 1)) + 2,
-        });
-      existingUrl = await URL.findOne({ urlCode });
+      urlCode += randomstring.generate({
+        charset: "numeric",
+        length: Math.floor(Math.random() * (3 - 2 + 1)) + 2,
+      });
     }
     const shortUrl = `${origin}/${urlCode}`;
 

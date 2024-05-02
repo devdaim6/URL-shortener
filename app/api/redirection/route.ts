@@ -10,6 +10,7 @@ export async function POST(request: any) {
   const response = await fetch("https://api.ipify.org?format=json");
   const data = await response.json();
   const ip = data.ip;
+  console.log(urlCode);
   try {
     await connectMongoDB();
     const urlObject = await URL.findOne({ urlCode });
@@ -40,13 +41,12 @@ export async function POST(request: any) {
           ipEntry.limit -= 1;
         }
       } else {
-        // Reset limit if last accessed is more than a minute ago
+    
         ipEntry.limit = 10;
       }
 
-      ipEntry.lastAccessed = currentDate; // Update last accessed time
+      ipEntry.lastAccessed = currentDate;  
     } else {
-      // If IP entry doesn't exist, create a new one
       urlObject.ratelimit.push({ ip, limit: 10, lastAccessed: currentDate });
     }
 

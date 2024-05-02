@@ -33,8 +33,6 @@ const Main: FC = () => {
     setUrlError(!validateUrl(e.target.value));
   };
 
-
-
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 to-pink-500">
@@ -95,7 +93,10 @@ const Main: FC = () => {
                 name="urlType"
                 value="random"
                 checked={urlType === "random"}
-                onChange={() => setUrlType("random")}
+                onChange={() => {
+                  setCustomUrlCode("");
+                  setUrlType("random");
+                }}
                 className="text-black"
               />
               <label htmlFor="random " className="text-black">
@@ -107,7 +108,10 @@ const Main: FC = () => {
                 name="urlType"
                 value="custom"
                 checked={urlType === "custom"}
-                onChange={() => setUrlType("custom")}
+                onChange={() => {
+                  setCustomUrlCode("");
+                  setUrlType("custom");
+                }}
                 className="text-black"
               />
               <label htmlFor="custom " className="text-black">
