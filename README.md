@@ -6,15 +6,15 @@ This is a simple URL shortener application built with React. It allows users to 
 
 ## Technologies Used
 
-- React
+- Next.js
 - Tailwind CSS
 - MongoDB
 
 ## How to Run
 
 1. Clone the repository
-2. Install the dependencies with `npm install`
-3. Start the development server with `npm start`
+2. Install the dependencies with `npm install or pnpm install`
+3. Start the development server with `npm run dev or pnpm run dev`
 
 ## How to Use
 
@@ -26,8 +26,6 @@ This is a simple URL shortener application built with React. It allows users to 
 
 ## Future Improvements
 
-- Implement URL validation
-- Add error handling
 - Improve the design
 
 Feel free to contribute to this project by forking the repository and creating a pull request.
