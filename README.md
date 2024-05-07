@@ -2,6 +2,8 @@
 
 This is a simple URL shortener application built with React. It allows users to enter a long URL and a desired length for the short URL. The application then generates a short URL and displays it to the user. The user can also copy the short URL to their clipboard.
 
+![URL Shortener Architecture]('https://github.com/devdaim6/URL-shortener/tree/main/public')
+
 ## Technologies Used
 
 - React
