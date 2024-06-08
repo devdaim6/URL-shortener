@@ -8,36 +8,35 @@ export async function POST(request: any) {
   const { longUrl, urlLength, customUrlCode } = await request.json();
   const origin = request?.nextUrl?.origin;
 
-  await connectMongoDB();
-
-  let urlCode = customUrlCode
-    ? customUrlCode
-    : randomstring
-        .generate({
-          charset: "alphabetic",
-          length: Number(urlLength),
-        })
-        .toLocaleLowerCase();
-  const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
-  const encryptedLongUrl = cryptr.encrypt(longUrl);
-  let existingUrl = await URL.findOne({ urlCode });
-
-  if (existingUrl) {
-    urlCode += randomstring.generate({
-      charset: "numeric",
-      length: Math.floor(Math.random() * (3 - 2 + 1)) + 2,
-    });
-  }
-  const shortUrl = `${origin}/${urlCode}`;
-
-  await URL.create({
-    originalUrl: encryptedLongUrl,
-    urlCode: urlCode,
-    type: customUrlCode ? "custom" : "random",
-  });
-  console.log("working");
-
   try {
+    await connectMongoDB();
+
+    let urlCode = customUrlCode
+      ? customUrlCode
+      : randomstring
+          .generate({
+            charset: "alphabetic",
+            length: Number(urlLength),
+          })
+          .toLocaleLowerCase();
+    const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
+    const encryptedLongUrl = cryptr.encrypt(longUrl);
+    let existingUrl = await URL.findOne({ urlCode });
+
+    if (existingUrl) {
+      urlCode += randomstring.generate({
+        charset: "numeric",
+        length: Math.floor(Math.random() * (3 - 2 + 1)) + 2,
+      });
+    }
+    const shortUrl = `${origin}/${urlCode}`;
+
+    await URL.create({
+      originalUrl: encryptedLongUrl,
+      urlCode: urlCode,
+      type: customUrlCode ? "custom" : "random",
+    });
+
     return NextResponse.json({
       message: "The URL has been successfully shortened.",
       shortUrl,
