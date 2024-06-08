@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-
 import { URL } from "@/models/url";
 
 export async function PATCH() {
@@ -21,13 +20,16 @@ export async function PATCH() {
         return rateLimit;
       });
     });
-    await URL.bulkSave(urls);
+    await URL.updateMany(
+      {},
+      { $set: { ratelimit: { $each: urls.map((url) => url.ratelimit) } } }
+    );
     return NextResponse.json({
       status: 200,
       message: "Bulk Deactivation and Rate Limit Reset Done",
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ status: 500, error: "Cron Job Failed" });
+    return NextResponse.json({ error: "Cron Job Failed" });
   }
 }
