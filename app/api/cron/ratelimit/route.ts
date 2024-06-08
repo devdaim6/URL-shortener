@@ -3,14 +3,10 @@ import { URL } from "@/models/url";
 
 export async function PATCH() {
   try {
-    const currentTime = new Date();
-    await URL.updateMany(
-      { active: true, linkExpiration: { $lt: currentTime } },
-      { $set: { active: false } }
-    );
+    await URL.updateMany({}, { $set: { "ratelimit.$[].limit": 10 } });
     return NextResponse.json({
       status: 200,
-      message: "Bulk Deactivation and Rate Limit Reset Done",
+      message: "Rate Limit Reset Done",
     });
   } catch (error) {
     console.error(error);
