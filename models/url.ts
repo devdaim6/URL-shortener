@@ -9,6 +9,7 @@ const UrlSchema = new mongoose.Schema({
     type: Date,
     default: () => Date.now() + 30 * 24 * 60 * 60 * 1000,
   },
+  active: { type: Boolean, default: true },
   password: { type: String, default: "" },
   clicks: { type: Number, default: 0 },
   lastAccessed: { type: Date, default: Date.now() },
