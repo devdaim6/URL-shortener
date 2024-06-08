@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
 import { URL } from "@/models/url";
 
-export async function PATCH(req: NextRequest, res: NextResponse) {
+export async function PATCH() {
   try {
     const urls = await URL.find().exec();
-    urls.forEach((url) => {
+    urls.forEach((url: any) => {
       if (url.linkExpiration < new Date()) {
         url.active = false;
       }
