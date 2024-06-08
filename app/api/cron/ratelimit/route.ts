@@ -4,6 +4,7 @@ import { URL } from "@/models/url";
 export async function PATCH() {
   try {
     await URL.updateMany({}, { $set: { "ratelimit.$[].limit": 10 } });
+    console.log("Rate Limit Reset for all");
     return NextResponse.json({
       status: 200,
       message: "Rate Limit Reset Done",

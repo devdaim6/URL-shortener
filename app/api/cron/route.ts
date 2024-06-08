@@ -8,6 +8,7 @@ export async function PATCH() {
       { active: true, linkExpiration: { $lt: currentTime } },
       { $set: { active: false } }
     );
+    console.log("All Expired Links have been set as Inactive");
     return NextResponse.json({
       status: 200,
       message: "Bulk Deactivation and Rate Limit Reset Done",
